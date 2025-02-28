@@ -1,0 +1,11 @@
+name: RookieScene
+version: '${version}'
+main: com.cuzz.rookiescene.RookieScene
+api-version: '1.20'
+commands:
+  rline:
+    description: Executes the line command
+    usage: /<command> <args>
+  rtest:
+    description: Executes the test command
+    usage: /<command> <args>

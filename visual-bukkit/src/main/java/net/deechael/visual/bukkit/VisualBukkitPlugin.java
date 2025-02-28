@@ -9,10 +9,12 @@ import net.deechael.visual.api.geometry.Geometry;
 import net.deechael.visual.curve.CurveManagerImpl;
 import net.deechael.visual.geometry.GeometryImpl;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -21,11 +23,12 @@ import java.util.UUID;
 
 public class VisualBukkitPlugin extends JavaPlugin implements VisualPlatform, Listener {
 
-    private final static AnimationManager ANIMATION_MANAGER = new AnimationManagerImpl();
-    private final static Geometry GEOMETRY = new GeometryImpl();
-    private final static CurveManager CURVE_MANAGER = new CurveManagerImpl();
+    private   AnimationManager ANIMATION_MANAGER ;
+    private   Geometry GEOMETRY;
+    private   CurveManager CURVE_MANAGER;
 
-    private final Map<UUID, BukkitViewer> viewers = new HashMap<>();
+    private  Map<UUID, BukkitViewer> viewers = new HashMap<>();
+    private static VisualBukkitPlugin INSTANCE;
 
     @EventHandler
     public void playerQuit(PlayerQuitEvent event) {
@@ -37,10 +40,17 @@ public class VisualBukkitPlugin extends JavaPlugin implements VisualPlatform, Li
     }
 
     public static VisualBukkitPlugin getInstance() {
-        return JavaPlugin.getPlugin(VisualBukkitPlugin.class);
+        return INSTANCE;
     }
 
     public Viewer getViewer(Player player) {
+
+        ItemStack pumpkinHead = new ItemStack(Material.CARVED_PUMPKIN);
+
+        // 将南瓜头放到玩家的头盔槽
+        player.getInventory().setHelmet(pumpkinHead);
+
+
         if (this.viewers.containsKey(player.getUniqueId()))
             return this.viewers.get(player.getUniqueId());
         BukkitViewer newViewer = new BukkitViewer(player);
@@ -50,9 +60,15 @@ public class VisualBukkitPlugin extends JavaPlugin implements VisualPlatform, Li
 
     @Override
     public void onEnable() {
+        INSTANCE=this;
+        GEOMETRY = new GeometryImpl();
+        ANIMATION_MANAGER= new AnimationManagerImpl();
+
+        CURVE_MANAGER = new CurveManagerImpl();
+        System.out.println("777");
         Bukkit.getPluginManager().registerEvents(this, this);
     }
-
+        //GU
     @Override
     public void onDisable() {
         for (BukkitViewer viewer : this.viewers.values()) {

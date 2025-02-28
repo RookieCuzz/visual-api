@@ -12,4 +12,4 @@ include 'visual-api'
 include 'visual-common'
 include 'visual-bukkit'
 include 'visual-bukkit-test'
-
+include 'RookieScene'
